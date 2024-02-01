@@ -1,16 +1,3 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,21 +17,22 @@ crossorigin=""></script>
 <body>
     <div id="map"></div>
     <!-- Script tag with an address to the source of a js script -->
-    <script src="./data/waypoints.js"></script>
+    <script src="./JULIAN.js"></script>
     <script>
     
-    var carolinaHall = [35.911276,-79.05004]   
-    var map = L.map('map').setView(carolinaHall, 17);
+    var start = [32.1,-51.7]   
+    var map = L.map('map').setView(start, 4);
         var OSM = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
+                        maxZoom: 9,
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(map);
 
-        var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        var Esri_OceanBasemap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri',
+            maxZoom: 9
         });
         
-        var marker = L.marker([35.911276,-79.05004]).bindPopup("<b>Carolina Hall</b>").addTo(map);
+        var marker = L.marker([32.1,-51.7]).bindPopup("<b>start</b>").addTo(map);
        // L.geoJSON(waypoints).addTo(map);
 
         var geojsonMarkerOptions = {
@@ -56,16 +44,15 @@ crossorigin=""></script>
         fillOpacity: 0.8};
 
 
-var myWaypoints = L.geoJSON(waypoints, {
+var julpoints = L.geoJSON(JULIAN, {
     pointToLayer: function (feature, latlng) {
         return L.circleMarker(latlng, geojsonMarkerOptions);
     }
 
     
-}).addTo(map);
-
-var lat = waypoints.features[0].geometry.coordinates[1];
-var lon = waypoints.features[0].geometry.coordinates[0];
+}).addTo(map)
+var lat = JULIAN.features[0].geometry.coordinates[1];
+var lon = JULIAN.features[0].geometry.coordinates[0];
 var latlon = [lat,lon];
 L.marker(latlon).addTo(map);
          
@@ -78,17 +65,20 @@ L.marker(latlon).addTo(map);
 
 var baseMaps = {
     "OpenStreetMap": OSM,
-    "Esri Images": Esri_WorldImagery
+    "Esri OceanBase": Esri_OceanBasemap
 };
 
 var overlayMaps = {
-    "GPS Track": myWaypoints,
-    "Carolina Hall": marker,
-    "my forst waypoint": 
+    "Trajectory": julpoints,
+    "start": marker,
+   
 };
 
 var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map); 
    </script>
     <!-- <script src="./data/javascriptLines.js"></script> -->
 </body>
+<a href="https://en.wikipedia.org/wiki/2021_Atlantic_hurricane_season#Tropical_Storm_Julian"><h2>Tropical Storm Julian</h2></a>
+<a href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/NOAA-20_Fred%2C_Grace%2C_and_08L_August_16_2021.png/1920px-NOAA-20_Fred%2C_Grace%2C_and_08L_August_16_2021.png"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/NOAA-20_Fred%2C_Grace%2C_and_08L_August_16_2021.png/1920px-NOAA-20_Fred%2C_Grace%2C_and_08L_August_16_2021.png" alt="" width='500px'></a> <br>
+
 </html> 
