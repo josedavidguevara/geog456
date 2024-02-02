@@ -51,11 +51,9 @@ var julpoints = L.geoJSON(JULIAN, {
 
     
 }).addTo(map)
-var lat = JULIAN.features[0].geometry.coordinates[1];
-var lon = JULIAN.features[0].geometry.coordinates[0];
-var latlon = [lat,lon];
-L.marker(latlon).addTo(map);
-         
+
+
+
 
         
         
@@ -70,7 +68,7 @@ var baseMaps = {
 
 var overlayMaps = {
     "Trajectory": julpoints,
-    "start": marker,
+    "Start": marker,
    
 };
 
