@@ -19,7 +19,8 @@ crossorigin=""></script>
     <div id="map"></div>
     <!-- Script tag with an address to the source of a js script -->
     <script src="./data/waypoints.js"></script>
-    
+
+    <script>
     
     var carolinaHall = [35.911276,-79.05004]   
     var map = L.map('map').setView(carolinaHall, 17);
@@ -72,11 +73,12 @@ var baseMaps = {
 var overlayMaps = {
     "GPS Track": myWaypoints,
     "Carolina Hall": marker,
-    "my forst waypoint": 
+   
 };
 
 var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map); 
-   </script>
+
+</script>
     <!-- <script src="./data/javascriptLines.js"></script> -->
 </body>
 </html> 

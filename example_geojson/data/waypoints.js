@@ -28,4 +28,4 @@ var waypoints = {
 { "type": "Feature", "properties": { "y": 35.911071, "x": -79.050281, "z": 147.0, "t": "2024-01-19T16:31:54", "note": "hello I am waypoint 18" }, "geometry": { "type": "Point", "coordinates": [ -79.050281, 35.911071 ] } },
 { "type": "Feature", "properties": { "y": 35.911002, "x": -79.050381, "z": 148.8, "t": "2024-01-19T16:32:15", "note": "hello I am waypoint 19" }, "geometry": { "type": "Point", "coordinates": [ -79.050381, 35.911002 ] } }
 ]
-}
+} 
