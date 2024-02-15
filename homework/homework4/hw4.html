@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Basic styling for the clickable div */
+        .redbox {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            margin: 10px;
+            width: auto;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div onclick="console.log(mig2015)" class="redbox">Click Here to Print Array!</div>
+    
+    <script src="mig_data.js"></script>
+    <script>
+       var mig2015 = MIG.features.map(e => ({
+           lon: e.geometry.coordinates[0],
+           lat: e.geometry.coordinates[1],
+           migration2015: e.properties['2015']
+       }));
+    </script>
+</body>
+</html>
