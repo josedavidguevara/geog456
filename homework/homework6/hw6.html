@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<script src='mig_data.js'></script>
+<body>
+
+<h2>Migration to Venezuela</h2>
+
+<table id = "MigTable">
+  <tr>
+    <th>Country</th>
+    <th>Migrant Amounts</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+  </tr>
+</table>
+
+
+
+</body>
+<script>
+    var x = document.getElementById('MigTable')
+    for (var i = 0; i< MIG.features.length; i++){
+        var myNewRow = document.createElement('tr')
+        var myNewCell1 = document.createElement('td')
+        var myNewCell2 = document.createElement('td')
+        var myNewCell3 = document.createElement('td')
+        var myNewCell4 = document.createElement('td')
+
+        myNewCell1.innerText = MIG.features[i].properties.dest_country;
+        myNewCell2.innerText = MIG.features[i].properties['2015'];
+        myNewCell3.innerText = MIG.features[i].geometry.coordinates[0];
+        myNewCell4.innerText = MIG.features[i].geometry.coordinates[1];
+
+
+        myNewRow.append(myNewCell1)
+        myNewRow.append(myNewCell2)
+        myNewRow.append(myNewCell3)
+        myNewRow.append(myNewCell4)
+        x.append(myNewRow)
+
+    }
+
+</script>
+</html>
+

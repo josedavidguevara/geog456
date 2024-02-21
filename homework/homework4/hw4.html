@@ -24,6 +24,7 @@
     <script src="mig_data.js"></script>
     <script>
        var mig2015 = MIG.features.map(e => ({
+           name: e.properties.dest_country,
            lon: e.geometry.coordinates[0],
            lat: e.geometry.coordinates[1],
            migration2015: e.properties['2015']
