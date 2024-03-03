@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet with Slider</title>
+    <script src = "final0301js.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+    <style>
+        h1 {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 36px;
+            position: relative;
+            top: 10%;
+            text-align: center;
+            -webkit-text-stroke-width: 1px;
+        }
+        h2 {
+            font-family: 'Roboto', 'Helvetica Neue', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            position: relative;
+            text-align: center;
+        }
+        .legend {
+            line-height: 18px;
+            color: #555;
+            background-color: #fff;
+            padding: 6px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        #map {
+            height: 65vh;
+            width: 80vw;
+            margin: auto;
+            background-color: #ccc;
+        }
+        input[type="range"] {
+        display: block; /* Make the slider a block element to center it */
+        margin: 0 auto; /* Center the slider horizontally */
+        width: 30%; /* Adjust the width as needed */
+        top: 20%; /* Distance from the top of the viewport */
+        position: relative; /* Relative to its normal position */
+    }
+
+    </style>
+</head>
+<body>
+    <h1>Global Migration From Venezuela Through Time</h1>
+    <h2 id="theYear">Year</h2>
+    <input type="range" name="year" value="1990" min="1990" max="2020" step="5" oninput="moveSlider(this.value)">
+    <div id="map"></div>
+    <div class="legend"></div>
+
+    <script>
+        var map = L.map('map').setView([30.293322656220493, -20.74882492684549], 1.6);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var selectedYear = '1990';
+
+        function myStyle(feature) {
+            if (feature.properties.name === 'Venezuela') {
+                return {
+                    "fillColor": "#3182bd", // Set Venezuela to blue
+                    "color": "black",
+                    "weight": 0.75,
+                    "opacity": 2.0,
+                    "fillOpacity": 0.9};
+                } else {
+                    return {
+                        "fillColor": getColor(feature.properties[selectedYear]),
+                         "color": "black",
+                         "weight": 0.75,
+                         "opacity": 2.0,
+                         "fillOpacity": 0.9
+            };
+        }
+    }
+
+        function getColor(migAmount) {
+            return migAmount > 1000000 ? '#800026' :
+                   migAmount > 500000  ? '#BD0026' :
+                   migAmount > 200000  ? '#E31A1C' :
+                   migAmount > 100000  ? '#FC4E2A' :
+                   migAmount > 50000   ? '#FD8D3C' :
+                   migAmount > 20000   ? '#FEB24C' :
+                   migAmount > 10000   ? '#FED976' :
+                   migAmount > 1   ? '#FFEDA0':
+                                         '#ffffff'; 
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on({
+                click: function(e) {
+                    var props = feature.properties;
+                    var migrationInfo = props[selectedYear] ? props[selectedYear] + '' : 'Zero/No data';
+                    var popupContent = '<b>Country:</b> ' + (props.name || 'Unknown') + '<br><b>Year:</b> ' + selectedYear + '<br><b>Number of Migrants:</b> ' + migrationInfo;
+                    layer.bindPopup(popupContent).openPopup();
+                }
+            });
+        }
+
+        var Venezuelans;
+
+        function moveSlider(value) {
+            selectedYear = value;
+            if (Venezuelans) map.removeLayer(Venezuelans);
+            Venezuelans = L.geoJSON(MIG, {
+                style: myStyle,
+                onEachFeature: onEachFeature
+            }).addTo(map);
+            document.getElementById('theYear').innerHTML = 'Year: ' + value;
+        }
+
+        moveSlider('1990');
+
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend'),
+                grades = [0, 10000, 20000, 50000, 100000, 200000, 500000, 1000000],
+                labels = [];
+
+            div.innerHTML = '<strong>Migration</strong><br>';
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + ' migrants<br>' : '+');
+            }
+
+            return div;
+        };
+
+        legend.addTo(map);
+
+    </script>
+    <ul>
+        <li><a href="https://www.un.org/development/desa/pd/content/international-migrant-stock"><h3>Source: UN Population Division: International Migrant Stock</h3></a></li>
+    </ul>
+    <h2>Map By Jose Guevara Hernandez</h2>
+</body>
+</html>
