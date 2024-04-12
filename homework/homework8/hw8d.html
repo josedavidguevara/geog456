@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW8 D</title>
+</head>
+<style>
+    img{
+        position:absolute;
+        height: 550px;
+    }
+    button{
+        position:absolute;
+        top:550px;
+    }
+</style>
+<body>
+        <img id = '2011' src="./pngs/img2011.png" alt="Franklin, TN: 2011" width="550px">
+        <img id = '2016' src="./pngs/img2016.png" alt="Franklin, TN: 2016" width="550px">
+        <img id = '2021' src="./pngs/img2021.png" alt="Franklin, TN: 2021" width="550px">
+        <button style="left:10px" onclick="myFunction('2011')">2011</button>
+        <button style="left:100px" onclick="myFunction('2016')">2016</button>
+        <button style="left:200px" onclick="myFunction('2021')">2021</button>
+</body>
+<script>
+    function myFunction(id){
+        var imgs = document.getElementsByTagName('img')
+        for(var i = 0; i < imgs.length; i++){
+            imgs[i].style.visibility = 'hidden'
+        }
+        var daImg = document.getElementById(id)
+        daImg.style.visibility = 'visible'
+        console.log(daImg)
+    }
+</script>
+</html>
