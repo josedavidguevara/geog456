@@ -11,20 +11,26 @@
     <script src="./data/world.js"></script>
     <script src="./data/data.js"></script>
     <script src="./quants.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
 
     <style>
+
         h1 {
-            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: "Oswald", sans-serif;
             font-size: 36px;
             position: relative;
             top: 10%;
             text-align: center;
             -webkit-text-stroke-width: 1px;
+            color:#fff
         }
         h2 {
-            font-family: 'Roboto', 'Helvetica Neue', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-family: "Oswald", sans-serif;
             position: relative;
             text-align: center;
+            color:#fff
         }
         .legend {
             line-height: 18px;
@@ -49,6 +55,13 @@
             margin: auto;
             background-color: #ccc;
         }
+
+        body {
+            background-image: url('migration2.jpeg'); /* Ensure this points to the correct image */
+            background-size: cover;
+            background-position: center;
+
+        }
         input[type="range"] {
         display: block; /* Make the slider a block element to center it */
         margin: 0 auto; /* Center the slider horizontally */
@@ -61,8 +74,6 @@
     </style>
 </head>
 <body>
-
-    
     <h1>Global Migration Through Time</h1>
     <h2 id="theYear">Year</h2>
     <div id="map"></div>
