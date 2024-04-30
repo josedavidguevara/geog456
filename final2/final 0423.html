@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet with Slider</title>
+    <script src = "sample.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+    <script src="./data/world.js"></script>
+    <script src="./data/data.js"></script>
+    <script src="./quants.js"></script>
+
+    <style>
+        h1 {
+            font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 36px;
+            position: relative;
+            top: 10%;
+            text-align: center;
+            -webkit-text-stroke-width: 1px;
+        }
+        h2 {
+            font-family: 'Roboto', 'Helvetica Neue', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            position: relative;
+            text-align: center;
+        }
+        .legend {
+            line-height: 18px;
+            color: #1e1212;
+            background-color: #fff;
+            padding: 6px;
+            border: 1px solid #999;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        #map {
+            height: 65vh;
+            width: 80vw;
+            margin: auto;
+            background-color: #ccc;
+        }
+        input[type="range"] {
+        display: block; /* Make the slider a block element to center it */
+        margin: 0 auto; /* Center the slider horizontally */
+        width: 30%; /* Adjust the width as needed */
+        top: 20%; /* Distance from the top of the viewport */
+        position: relative; /* Relative to its normal position */
+    }
+      
+   
+    </style>
+</head>
+<body>
+
+    
+    <h1>Global Migration Through Time</h1>
+    <h2 id="theYear">Year</h2>
+    <div id="map"></div>
+    <input type="range" name="year" value="1990" min="1990" max="2020" step="5" oninput="moveSlider(this.value)">
+    <select id="countrySelector">
+        <option value="4">Afghanistan</option>
+<option value="8">Albania</option>
+<option value="12">Algeria</option>
+<option value="51">Armenia</option>
+<option value="36">Australia</option>
+<option value="40">Austria</option>
+<option value="31">Azerbaijan</option>
+<option value="50">Bangladesh</option>
+<option value="112">Belarus</option>
+<option value="56">Belgium</option>
+<option value="68">Bolivia</option>
+<option value="72">Botswana</option>
+<option value="76">Brazil</option>
+<option value="100">Bulgaria</option>
+<option value="124">Canada</option>
+<option value="120">Cameroon</option>
+<option value="156">China</option>
+<option value="170">Colombia</option>
+<option value="180">Congo, Democratic Republic of the</option>
+<option value="203">Czech Republic</option>
+<option value="208">Denmark</option>
+<option value="214">Dominican Republic</option>
+<option value="218">Ecuador</option>
+<option value="231">Ethiopia</option>
+<option value="246">Finland</option>
+<option value="268">Georgia</option>
+<option value="276">Germany</option>
+<option value="288">Ghana</option>
+<option value="300">Greece</option>
+<option value="320">Guatemala</option>
+<option value="332">Haiti</option>
+<option value="348">Hungary</option>
+<option value="372">Ireland</option>
+<option value="392">Japan</option>
+<option value="388">Jamaica</option>
+<option value="484">Mexico</option>
+<option value="554">New Zealand</option>
+<option value="578">Norway</option>
+<option value="616">Poland</option>
+<option value="642">Romania</option>
+<option value="643">Russia</option>
+<option value="702">Singapore</option>
+<option value="710">South Africa</option>
+<option value="724">Spain</option>
+<option value="752">Sweden</option>
+<option value="756">Switzerland</option>
+<option value="764">Thailand</option>
+<option value="792">Turkey</option>
+<option value="804">Ukraine</option>
+<option value="826">United Kingdom</option>
+<option value="840">United States</option>
+<option value="862">Venezuela</option>
+
+        <!-- Add more countries as needed -->
+    </select>
+    
+
+    <script>
+
+
+// Hola Jose 
+// Esta es la funcion que hace toda la magia
+
+var myObj ={}
+var selectedOriginCode;
+var selectedYear = '2020'; 
+var MigValues = {}
+
+function selectOriginObj(){
+    // console.log(selectedOriginCode)
+    myObj = {}
+    //hace un loop en los datos
+    for (let i = 0; i < data.features.length; i++){
+        // busca cuales son los datos que tienen el mismo codigo selecionado en el dropdown menu
+        if (data.features[i].properties.origin_code == selectedOriginCode){
+            // hace propiedades el el objeto myObj con el nombre del iso3
+            myObj[data.features[i].properties.destination_alpha3] = {
+                // anhade propiedades con el nombre del anho. 
+            '2020' : data.features[i].properties['2020'],
+            '2015' : data.features[i].properties['2015'],
+            '2010' : data.features[i].properties['2010'],                                          
+            '2005' : data.features[i].properties['2005'],
+            '2000' : data.features[i].properties['2000'],
+            '1995' : data.features[i].properties['1995'],
+            '1990' : data.features[i].properties['1990'] 
+        } // Jose, you need to extend this to have the other dates
+        }
+    }
+    delete myObj.null
+
+    // testing if I can join the data
+    // for (let i = 0; i < world.features.length; i++){
+    //         if(myObj[world.features[i].properties.iso3] )
+    //         {console.log(world.features[i].properties.iso3)}
+    // }
+}
+
+var pArray;
+
+// Event listener for when the selected country changes
+document.getElementById('countrySelector').addEventListener('change', function() {
+    selectedOriginCode = parseInt(this.value, 10); 
+    //pArray = [1.0, 33.5, 288.5, 943.2, 5017.0, 9370.2, 36059.8];
+    // Get the selected origin_code as a number
+    selectOriginObj()
+    updatePArray();
+    resetStyle()
+});
+
+// Handle changes to the year slider
+function moveSlider(newYear) {
+    selectedYear = newYear.toString();  // Update the selected year based on the slider
+    resetStyle();  // Update the map style to reflect the new year
+    document.getElementById('theYear').innerHTML = 'Year: ' + newYear; // Optional: log the change
+}
+
+
+        
+        var map = L.map('map').setView([30.293322656220493, -20.74882492684549], 1.6);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+        var myVector =  L.geoJSON(world, {
+        style: myStyle,
+        onEachFeature: onEachFeature
+        }).addTo(map);
+
+       
+        
+        var selectedYear = '1990'
+
+        // data.features[0]
+        // .properties.origin_code // this is the origen code location 
+        // .properties.destination // this is the destination code
+        // data.features[0].properties['2020'] // this would be the destination values for 2000
+
+
+
+        // the dropdown menu selects the origin_code
+        
+        
+        // I can make an object that just selects the values related to that orgin_code
+        // I am going to do the obj to help Jose see the steps. 
+        // the geojson method will look in each vector destination
+        // then the style should look for the data based on year
+
+        function updatePArray() {
+    var migrationData = [];
+    for (var key in myObj) {
+        if (myObj[key][selectedYear]) {
+            migrationData.push(myObj[key][selectedYear]);
+        }
+    }
+    migrationData.sort((a, b) => a - b);
+    var quantiles = [0.1, 0.25, 0.5, .65, 0.75, 0.85, 0.95, .99];
+    pArray = quantiles.map(q => migrationData[Math.floor(q * migrationData.length)]);
+    console.log('Updated pArray:', pArray); // Logging for debugging
+}
+
+//function resetStyle(){
+   // myVector.eachLayer(function (layer) {
+      //  layer.setStyle(myStyle(layer.feature)); // Explicitly set style for each layer
+  //  });
+//}
+
+
+
+
+
+
+        var aColor = ['#ffffcc','#ffeda0','#fed976','#feb24c','#fd8d3c','#fc4e2a','#e31a1c','#bd0026','#800026']
+
+        pArray = [];
+
+
+        function myC(value, aColor, pArray){
+            for(let i = pArray.length - 1; i >= 0; i--) {
+                if(value >= pArray[i]) {
+                    return aColor[i + 1]; // Ensure we return the correct color for the range
+                }
+            }
+            return aColor[0]; // Return the lowest color if no other condition is met
+        }
+
+        
+
+        function myStyle(feature) {
+    if (myObj[feature.properties.iso3] && myObj[feature.properties.iso3][selectedYear]) {
+        return {
+            "fillColor": myC(myObj[feature.properties.iso3][selectedYear], aColor, pArray),
+            "color": "black",
+            "weight": 0.75,
+            "opacity": 2.0,
+            "fillOpacity": 0.9
+        };
+    } else {
+        return {
+            "fillColor": "white",
+            "color": "gray",
+            "weight": 0.75,
+            "opacity": 2.0,
+            "fillOpacity": 0.9
+        };
+    }
+}
+
+    //function resetStyle(){
+       // myVector.resetStyle()
+   // }
+
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML = '<h4>Migrant Numbers</h4>';
+    for (var i = 0; i < pArray.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + myC(pArray[i] + 1, aColor, pArray) + '"></i> ' +
+            pArray[i] + (pArray[i + 1] ? '&ndash;' + pArray[i + 1] + '<br>' : '+');
+    }
+    return div;
+};
+
+legend.addTo(map);
+
+function updateLegend() {
+    // Remove the current legend to prevent duplicates
+    legend.remove();
+    legend.addTo(map);
+
+    // Update the content dynamically based on the current pArray
+    var div = legend.getContainer();
+    div.innerHTML = '<h4>Migrant Numbers</h4>';
+    for (var i = 0; i < pArray.length; i++) {
+        var nextThreshold = pArray[i + 1] || ' and above';
+        var color = myC(pArray[i] + 1, aColor, pArray);
+        div.innerHTML +=
+            '<i style="background:' + color + '"></i> ' +
+            (pArray[i].toLocaleString() + (i < pArray.length - 1 ? '&ndash;' + pArray[i + 1].toLocaleString() + '<br>' : '+'));
+    }
+}
+
+function onEachFeature(feature, layer) {
+    // Attach a click listener to each layer (country)
+    layer.on('click', function(e) {
+        // Check if there is migration data for the selected year and the clicked country
+        if (myObj[feature.properties.iso3] && myObj[feature.properties.iso3][selectedYear]) {
+            var migrationCount = myObj[feature.properties.iso3][selectedYear];
+            var content = `<b>Country:</b> ${feature.properties.name}<br>` +
+                          `<b>Migrants in ${selectedYear}:</b> ${migrationCount.toLocaleString()}`;
+            layer.bindPopup(content).openPopup();
+        } else {
+            layer.bindPopup("No data available for this country").openPopup();
+        }
+    });
+}
+
+function resetStyle() {
+    myVector.eachLayer(function (layer) {
+        layer.setStyle(myStyle(layer.feature)); // Explicitly set style for each layer
+    });
+    updateLegend(); // Update legend after restyling
+}
+
+
+
+
+
+
+    </script>
+    <ul>
+        <li><a href="https://www.un.org/development/desa/pd/content/international-migrant-stock"><h3>Source: UN Population Division: International Migrant Stock</h3></a></li>
+    </ul>
+    <h2>Map By Jose Guevara Hernandez</h2>
+</body>
+</html>
